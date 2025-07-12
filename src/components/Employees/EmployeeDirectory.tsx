@@ -11,7 +11,7 @@ interface Employee {
 }
 
 export default function EmployeeDirectory() {
-  const [employees, setEmployees] = useState<Employee[]>([
+  const [employees] = useState<Employee[]>([
    {
     id: 1,
     name: "Alice Mwende",

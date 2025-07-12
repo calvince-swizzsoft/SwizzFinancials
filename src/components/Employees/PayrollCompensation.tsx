@@ -12,7 +12,7 @@ interface EmployeePayroll {
 }
 
 export default function PayrollCompensation() {
-  const [employees, setEmployees] = useState<EmployeePayroll[]>([
+  const [employees] = useState<EmployeePayroll[]>([
     {
     id: 1,
     name: "Alice Muthoni",

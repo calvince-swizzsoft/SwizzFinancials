@@ -28,6 +28,7 @@ const initialRoles: Role[] = [
   },
 ];
 
+/*
 const allPermissions = [
   "Manage Users",
   "Manage Facilities",
@@ -38,9 +39,10 @@ const allPermissions = [
   "View Bookings",
   "Assist Members",
 ];
+*/
 
 export default function RolesPermissions() {
-  const [roles, setRoles] = useState<Role[]>(initialRoles);
+  const [roles] = useState<Role[]>(initialRoles);
 
   return (
     <div className="max-w-6xl mx-auto p-6 mt-6 bg-white dark:bg-gray-900 rounded-xl shadow-md">

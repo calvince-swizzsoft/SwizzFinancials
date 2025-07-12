@@ -25,7 +25,7 @@ const dummyAttendance: AttendanceEntry[] = [
 ];
 
 export default function AttendanceTracking() {
-  const [attendance, setAttendance] = useState<AttendanceEntry[]>(dummyAttendance);
+  const [attendance] = useState<AttendanceEntry[]>(dummyAttendance);
 
   return (
     <div className="max-w-6xl mx-auto p-6 mt-6 bg-white dark:bg-gray-900 rounded-xl shadow-md">

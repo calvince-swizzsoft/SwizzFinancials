@@ -11,7 +11,7 @@ interface TrainingRecord {
 }
 
 export default function TrainingCertifications() {
-  const [records, setRecords] = useState<TrainingRecord[]>([
+  const [records] = useState<TrainingRecord[]>([
     {
     id: 1,
     name: "James Kariuki",

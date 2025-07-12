@@ -11,7 +11,7 @@ interface PerformanceData {
 }
 
 export default function PerformanceTracking() {
-  const [data, setData] = useState<PerformanceData[]>([
+  const [data] = useState<PerformanceData[]>([
     {
     id: 1,
     name: "Alice Muthoni",
