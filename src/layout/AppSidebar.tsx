@@ -18,6 +18,7 @@ import {
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 //import SidebarWidget from "./SidebarWidget";
+import logo from "../../public/images/UKC_logo.png"
 
 
 
@@ -374,14 +375,14 @@ const AppSidebar: React.FC = () => {
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
               <img
                 className="dark:hidden"
-                src="public/images/UKC_logo.png"
+                src={logo}
                 alt="Logo"
                 width={50}
                 height={10}
               />
               <img
                 className="hidden dark:block"
-                src="public/images/UKC_logo.png"
+                src={logo}
                 alt="Logo"
                 width={50}
                 height={10}

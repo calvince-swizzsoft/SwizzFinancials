@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
+import bgImg from "../../public/images/bgImages/woodlight.jpg"
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -21,7 +22,7 @@ const LayoutContent: React.FC = () => {
         <AppHeader />
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6" 
             style={{
-              backgroundImage: 'url("public/images/bgImages/woodlight.jpg")',
+              backgroundImage: `url(${bgImg})`,
               backgroundColor: "rgba(118, 116, 116, 0.5)",
               backgroundSize: '300px',
               backgroundPosition: 'center',
