@@ -8,6 +8,18 @@ import {
   TableRow,
 } from "../ui/table";
 import PageIntro from "./PageIntro";
+import { Modal } from "../ui/modal";
+
+import { Zoomies } from 'ldrs/react'
+import 'ldrs/react/Zoomies.css'
+import ComponentCard from "../common/ComponentCard";
+import Alert from "../ui/alert/Alert";
+import Button from "../ui/button/Button";
+
+
+
+
+
 
 interface Member {
   memberID: number;
@@ -38,7 +50,17 @@ export default function ViewMember() {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 10;
+
+  const [isSubModalOpen, setIsSubModalOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [subscriptionForm, setSubscriptionForm] = useState({
+    planID: 1,
+    startDate: new Date().toISOString().slice(0, 10),
+    endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().slice(0, 10),
+  });
+
+
 
 
 
@@ -53,8 +75,8 @@ export default function ViewMember() {
       }
       return response.json();
     })
-    .then((data: Member[]) => {
-      setMembers(data);
+    .then((resmember: { data: Member[] }) => {
+      setMembers(resmember.data);
     })
     .catch((error) => {
       console.error("Error fetching members:", error);
@@ -77,18 +99,89 @@ const totalPages = Math.ceil(
 );
 
 
+ const handleSubscriptionSubmit = async () => {
+  if (!selectedMember) return;
+
+  const payload = {
+    memberID: selectedMember.memberID,
+    ...subscriptionForm,
+    isActive: true,
+  };
+
+  console.log(payload);
+
+  try {
+    const res = await fetch("http://197.232.170.121:8594/api/club/MemberSubscriptions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error("Subscription failed");
+    alert("Subscription successful!");
+    closeSubscribeModal();
+    console.log(res, payload);
+  } catch (error) {
+    console.error(error);
+    alert("Subscription failed. Try again.");
+  }
+};
+
+
+  const openSubscribeModal = (member: Member) => {
+    setSelectedMember(member);
+    setIsSubModalOpen(true);
+  };
+
+  const closeSubscribeModal = () => {
+    setIsSubModalOpen(false);
+    setSelectedMember(null);
+  };
+
+
+
+
 
 
 
   return (
     <div>
+      {/*loading*/}
+      {loading ? 
+      <ComponentCard title="">
+      <div className="p-3 text-center text-gray-500 bg-white rounded-xl" style={{display:"flex", justifyContent:'center',alignItems:"center",flexDirection:"column"}}>
+        <div className="mb-3">Loading members...</div>
+        <div>
+        <Zoomies
+          size="200"
+          stroke="5"
+          bgOpacity="0.1"
+          speed="1.4"
+          color="blue" 
+        />
+        </div>
+      </div>
+      </ComponentCard> 
+      :
+      <>
+       {error ?
+       <ComponentCard title="" >
+        <div className="p-6 text-center text-red-500">
+          <Alert
+              variant="error"
+              title={error}
+              message=""
+              showLink={false}
+            />
+        </div>
+        </ComponentCard>
+        :
+      <>  
       <PageIntro />
-      {loading && <div className="p-6 text-center text-gray-500">Loading members...</div>}
-      {error && <div className="p-6 text-center text-red-500">{error}</div>}
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]"
         style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)" }}>
         <div className="max-w-full overflow-x-auto">
-          <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between px-5 py-3">
+          <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between px-5 py-3 ">
             <div>
               <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
                 Member List
@@ -118,6 +211,9 @@ const totalPages = Math.ceil(
                 <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Email</TableCell>
                 <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Status</TableCell>
                 <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Join Date</TableCell>
+                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -130,7 +226,7 @@ const totalPages = Math.ceil(
                 )
                 .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                 .map((member) => (
-                <TableRow key={member.memberID}>
+                <TableRow key={member.memberID}  className="odd:bg-white even:bg-blue-50 dark:odd:bg-gray-900 dark:even:bg-blue-900">
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div>
@@ -162,6 +258,17 @@ const totalPages = Math.ceil(
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {new Date(member.joinDate).toLocaleDateString()}
                   </TableCell>
+                  <TableCell className="px-4 py-3 text-start">
+                    <Button
+                      onClick={() => openSubscribeModal(member)}
+                      size="sm"
+                      variant="primary"
+                    >
+                      Subscribe
+                    </Button>
+                  </TableCell>
+
+
                 </TableRow>
               ))}
             </TableBody>
@@ -186,8 +293,72 @@ const totalPages = Math.ceil(
             </button>
           </div>
 
+
+
+
+
+          <Modal isOpen={isSubModalOpen} onClose={closeSubscribeModal} className="max-w-lg m-4">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Subscribe {selectedMember?.fullName}</h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium">Plan ID</label>
+                  <select
+                    value={subscriptionForm.planID}
+                    onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, planID: +e.target.value }))}
+                    className="w-full mt-1 p-2 border rounded"
+                  >
+                    <option value={1}>Basic</option>
+                    <option value={2}>Standard</option>
+                    <option value={3}>Premium</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium">Start Date</label>
+                  <input
+                    type="date"
+                    value={subscriptionForm.startDate}
+                    onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, startDate: e.target.value }))}
+                    className="w-full mt-1 p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium">End Date</label>
+                  <input
+                    type="date"
+                    value={subscriptionForm.endDate}
+                    onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, endDate: e.target.value }))}
+                    className="w-full mt-1 p-2 border rounded"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={closeSubscribeModal}
+                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubscriptionSubmit}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Confirm Subscription
+                </button>
+              </div>
+            </div>
+          </Modal>
+
         </div>
       </div>
+      </>
+        }
+      </>
+      }
     </div>
   );
 }

@@ -50,16 +50,19 @@ const navItems: NavItem[] = [
   {
     name: "Facility",
     icon: <PageIcon />,
-    subItems: [
-      { name: "Facility Booking", path: "/FacilityBooking", pro: false },
-      { name: "Facility Registration", path: "/FacilityRegistration", pro: false },
-    ],
+    path:"/facility"
   },
   {
     icon: <CalenderIcon />,
     name: "Event",
     path: "/calendar",
   },
+  {
+    icon: <ListIcon />,
+    name: "Caddie",
+    path: "/Caddie",
+  },
+  /*
   {
     icon: <ListIcon />,
     name: "Communication Tools",
@@ -75,12 +78,8 @@ const navItems: NavItem[] = [
     name: "Reports",
     path: "/Reports",
   },
-  {
-    icon: <ListIcon />,
-    name: "Caddie",
-    path: "/Caddie",
-  },
-  {
+  */
+  /*{
     name: "Employees",
     icon: <PageIcon />,
     subItems: [
@@ -92,7 +91,7 @@ const navItems: NavItem[] = [
       { name: "Performance Tracking", path: "/PerformanceTracking", pro: false },
       { name: "Training Certifications", path: "/TrainingCertifications", pro: false },
     ],
-  },
+  },*/
 /*
   {
     icon: <UserCircleIcon />,
@@ -153,6 +152,7 @@ const othersItems: NavItem[] = [
     ],
   },
   */
+  
 ];
 
 const AppSidebar: React.FC = () => {

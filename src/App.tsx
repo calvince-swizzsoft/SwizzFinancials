@@ -20,7 +20,6 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import ViewMember from "./components/member/ViewMember";
 import SubBill from "./components/SubscriptionAndBilling/SubBill";
-import FacilityBooking from "./components/facility/FacilityBooking";
 import FacilityRegistration from "./components/facility/FacilityRegistration";
 import CommunicationTools from "./components/Communication/CommunicationTools";
 import AccessControl from "./components/Access/AccessControl";
@@ -33,6 +32,7 @@ import SchedulingRostering from "./components/Employees/SchedulingRostering";
 import PayrollCompensation from "./components/Employees/PayrollCompensation";
 import PerformanceTracking from "./components/Employees/PerformanceTracking";
 import TrainingCertifications from "./components/Employees/TrainingCertifications";
+import ViewFacility from "./components/facility/ViewFacility";
 
 export default function App() {
   return (
@@ -46,7 +46,6 @@ export default function App() {
 
             <Route index path="/member" element={<ViewMember />} />
             <Route index path="/Subscription-and-billing" element={<SubBill/>} />
-            <Route index path="/FacilityBooking" element={<FacilityBooking/>} />
             <Route index path="/FacilityRegistration" element={<FacilityRegistration/>} />
             <Route index path="/Communication" element={<CommunicationTools/>} />
             <Route index path="/AccessControl" element={<AccessControl/>} />
@@ -59,6 +58,7 @@ export default function App() {
             <Route index path="/PayrollCompensation" element={<PayrollCompensation/>} />
             <Route index path="/PerformanceTracking" element={<PerformanceTracking/>} />
             <Route index path="/TrainingCertifications" element={<TrainingCertifications/>} />
+            <Route index path="/facility" element={<ViewFacility/>} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
