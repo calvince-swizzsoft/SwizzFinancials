@@ -52,13 +52,17 @@ export default function ViewMember() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
-  const [isSubModalOpen, setIsSubModalOpen] = useState(false);
+  //const [isSubModalOpen, setIsSubModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [subscriptionForm, setSubscriptionForm] = useState({
     planID: 1,
     startDate: new Date().toISOString().slice(0, 10),
     endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().slice(0, 10),
   });
+
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentPhone, setPaymentPhone] = useState("");
+
 
 
 
@@ -99,43 +103,46 @@ const totalPages = Math.ceil(
 );
 
 
- const handleSubscriptionSubmit = async () => {
-  if (!selectedMember) return;
-
+const handlePaymentSubmit = async () => {
   const payload = {
-    memberID: selectedMember.memberID,
-    ...subscriptionForm,
-    isActive: true,
+    SessionID: "1",
+    Phonenumber: paymentPhone,
+    Amount: "5",
+    accno: paymentPhone,
+    TransactionType: "DirectDeposit",
+    TransactionType2: "DirectDeposit",
+    OrgCode: "68",
   };
 
-  console.log(payload);
-
   try {
-    const res = await fetch("http://197.232.170.121:8594/api/club/MemberSubscriptions", {
+    const res = await fetch("http://197.232.170.121:8596/api/payments/c2brequest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) throw new Error("Subscription failed");
-    alert("Subscription successful!");
-    closeSubscribeModal();
-    console.log(res, payload);
+    console.log(res);
+
+    if (!res.ok) throw new Error("Payment failed");
+    alert("Subscribed Successfully");
+    closePaymentModal();
   } catch (error) {
     console.error(error);
-    alert("Subscription failed. Try again.");
+    alert("Payment failed. Please try again.");
   }
 };
 
 
-  const openSubscribeModal = (member: Member) => {
-    setSelectedMember(member);
-    setIsSubModalOpen(true);
-  };
 
-  const closeSubscribeModal = () => {
-    setIsSubModalOpen(false);
-    setSelectedMember(null);
+ const openPaymentModal = (member: Member) => {
+  setSelectedMember(member);
+  setPaymentPhone(member.phone || "");
+  setIsPaymentModalOpen(true);
+};
+
+  const closePaymentModal = () => {
+    setPaymentPhone("");
+    setIsPaymentModalOpen(false);
   };
 
 
@@ -259,13 +266,14 @@ const totalPages = Math.ceil(
                     {new Date(member.joinDate).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-start">
-                    <Button
-                      onClick={() => openSubscribeModal(member)}
-                      size="sm"
-                      variant="primary"
-                    >
-                      Subscribe
-                    </Button>
+                      <Button
+                        onClick={() => openPaymentModal(member)}
+                        size="sm"
+                        variant="primary"
+                      >
+                        Subscribe
+                      </Button>
+
                   </TableCell>
 
 
@@ -297,61 +305,78 @@ const totalPages = Math.ceil(
 
 
 
-          <Modal isOpen={isSubModalOpen} onClose={closeSubscribeModal} className="max-w-lg m-4">
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Subscribe {selectedMember?.fullName}</h2>
+          <Modal isOpen={isPaymentModalOpen} onClose={closePaymentModal} className="max-w-md m-4">
+  <div className="p-6">
+    <h2 className="text-lg font-semibold mb-4">Initiate Payment for {selectedMember?.fullName}</h2>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium">Plan ID</label>
-                  <select
-                    value={subscriptionForm.planID}
-                    onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, planID: +e.target.value }))}
-                    className="w-full mt-1 p-2 border rounded"
-                  >
-                    <option value={1}>Basic</option>
-                    <option value={2}>Standard</option>
-                    <option value={3}>Premium</option>
-                  </select>
-                </div>
+    <div className="space-y-4">
+      {/* Plan ID Dropdown */}
+      <div>
+        <label className="block text-sm font-medium">Plan ID</label>
+        <select
+          value={subscriptionForm.planID}
+          onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, planID: +e.target.value }))}
+          className="w-full mt-1 p-2 border rounded"
+        >
+          <option value={1}>Basic</option>
+          <option value={2}>Standard</option>
+          <option value={3}>Premium</option>
+        </select>
+      </div>
 
-                <div>
-                  <label className="block text-sm font-medium">Start Date</label>
-                  <input
-                    type="date"
-                    value={subscriptionForm.startDate}
-                    onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, startDate: e.target.value }))}
-                    className="w-full mt-1 p-2 border rounded"
-                  />
-                </div>
+      {/* Start Date */}
+      <div>
+        <label className="block text-sm font-medium">Start Date</label>
+        <input
+          type="date"
+          value={subscriptionForm.startDate}
+          onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, startDate: e.target.value }))}
+          className="w-full mt-1 p-2 border rounded"
+        />
+      </div>
 
-                <div>
-                  <label className="block text-sm font-medium">End Date</label>
-                  <input
-                    type="date"
-                    value={subscriptionForm.endDate}
-                    onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, endDate: e.target.value }))}
-                    className="w-full mt-1 p-2 border rounded"
-                  />
-                </div>
-              </div>
+      {/* End Date */}
+      <div>
+        <label className="block text-sm font-medium">End Date</label>
+        <input
+          type="date"
+          value={subscriptionForm.endDate}
+          onChange={(e) => setSubscriptionForm((prev) => ({ ...prev, endDate: e.target.value }))}
+          className="w-full mt-1 p-2 border rounded"
+        />
+      </div>
 
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  onClick={closeSubscribeModal}
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSubscriptionSubmit}
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Confirm Subscription
-                </button>
-              </div>
-            </div>
-          </Modal>
+      {/* Phone Number */}
+      <div>
+        <label className="block text-sm font-medium">Phone Number</label>
+        <input
+          type="text"
+          value={paymentPhone}
+          onChange={(e) => setPaymentPhone(e.target.value)}
+          className="w-full mt-1 p-2 border rounded"
+          placeholder="e.g., 254712345678"
+        />
+      </div>
+    </div>
+
+    <div className="flex justify-end gap-3 mt-6">
+      <button
+        onClick={closePaymentModal}
+        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+      >
+        Cancel
+      </button>
+      <button
+        onClick={handlePaymentSubmit}
+        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+      >
+        Subscribe
+      </button>
+    </div>
+  </div>
+</Modal>
+
+
 
         </div>
       </div>
