@@ -483,7 +483,7 @@ const Calendar: React.FC = () => {
                 Event Color
               </label>
               <div className="flex flex-wrap items-center gap-4 sm:gap-5">
-                {Object.entries(calendarsEvents).map(([key, value]) => (
+                {Object.entries(calendarsEvents).map(([key]) => (
                   <label key={key} className="flex items-center text-sm text-gray-700 dark:text-gray-400">
                     <input
                       type="radio"
