@@ -117,6 +117,7 @@ export default function CaddieManagement() {
 
 
 
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "../ui/modal"; // Update path based on your file structure
@@ -205,6 +206,8 @@ export default function CaddieManagement() {
         <div className="p-6 bg-white dark:bg-gray-800 rounded-lg">
           <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Add New Caddie</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div>
+            <label>Full Name</label>
             <input
               type="text"
               placeholder="Full Name"
@@ -212,6 +215,9 @@ export default function CaddieManagement() {
               onChange={(e) => setNewCaddie({ ...newCaddie, fullName: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
             />
+            </div>
+             <div>
+            <label>Contact</label>
             <input
               type="text"
               placeholder="Contact"
@@ -219,6 +225,9 @@ export default function CaddieManagement() {
               onChange={(e) => setNewCaddie({ ...newCaddie, contact: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
             />
+            </div>
+            <div>
+            <label>ID</label>
             <input
               type="text"
               placeholder="ID Number"
@@ -226,6 +235,9 @@ export default function CaddieManagement() {
               onChange={(e) => setNewCaddie({ ...newCaddie, idNumber: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
             />
+            </div>
+            <div>
+            <label>Experience</label>
             <input
               type="number"
               placeholder="Experience Years"
@@ -233,6 +245,9 @@ export default function CaddieManagement() {
               onChange={(e) => setNewCaddie({ ...newCaddie, experienceYears: +e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
             />
+            </div>
+            <div>
+            <label>Rating</label>
             <input
               type="number"
               placeholder="Rating (e.g. 4.5)"
@@ -241,6 +256,9 @@ export default function CaddieManagement() {
               onChange={(e) => setNewCaddie({ ...newCaddie, rating: +e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
             />
+            </div>
+            <div>
+            <label>Tier Level</label>
             <input
               type="text"
               placeholder="Tier Level"
@@ -248,6 +266,9 @@ export default function CaddieManagement() {
               onChange={(e) => setNewCaddie({ ...newCaddie, tierLevel: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
             />
+            </div>
+            <div>
+            <label>Caddie</label>
             <select
               value={newCaddie.isAvailable ? "true" : "false"}
               onChange={(e) => setNewCaddie({ ...newCaddie, isAvailable: e.target.value === "true" })}
@@ -256,6 +277,7 @@ export default function CaddieManagement() {
               <option value="true">Available</option>
               <option value="false">Unavailable</option>
             </select>
+          </div>
           </div>
           <div className="flex justify-end gap-3 mt-6">
             <button
