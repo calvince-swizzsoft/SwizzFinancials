@@ -64,7 +64,7 @@ export default function ViewMember() {
   const [paymentPhone, setPaymentPhone] = useState("");
 
 
-
+  const [memberList, setMemberList] = useState<Member[]>([]);
 
 
 
@@ -72,7 +72,7 @@ export default function ViewMember() {
   setLoading(true);
   setError("");
 
-  fetch("http://197.232.170.121:8594/api/club/getAllMembers")
+  fetch(`http://102.209.56.234:8586/api/club/getAllMembers`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch members");
@@ -102,20 +102,30 @@ const totalPages = Math.ceil(
   ).length / pageSize
 );
 
+console.log(paymentPhone);
 
 const handlePaymentSubmit = async () => {
   const payload = {
     SessionID: "1",
     Phonenumber: paymentPhone,
     Amount: "5",
-    accno: paymentPhone,
+    accno: "254719119560",
     TransactionType: "DirectDeposit",
     TransactionType2: "DirectDeposit",
-    OrgCode: "68",
+    OrgCode: "68"
+  };
+
+ 
+  const subscriptionPayload = {
+    memberId: selectedMember?.memberID,
+    planId: subscriptionForm.planID,
+    startDate: subscriptionForm.startDate,
+    endDate: subscriptionForm.endDate,
+    isActive: true,
   };
 
   try {
-    const res = await fetch("http://197.232.170.121:8596/api/payments/c2brequest", {
+    const res = await fetch("http://102.209.56.234:8587/api/payments/c2brequest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -124,6 +134,19 @@ const handlePaymentSubmit = async () => {
     console.log(res);
 
     if (!res.ok) throw new Error("Payment failed");
+
+    // Step 2: Register subscription
+    const subRes = await fetch(
+      "http://102.209.56.234:8586/api/club/createMemberSubscription",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(subscriptionPayload),
+      }
+    );
+
+    if (!subRes.ok) throw new Error("Subscription failed");
+
     alert("Subscribed Successfully");
     closePaymentModal();
   } catch (error) {
@@ -144,6 +167,26 @@ const handlePaymentSubmit = async () => {
     setPaymentPhone("");
     setIsPaymentModalOpen(false);
   };
+
+
+
+
+  useEffect(() => {
+    fetch("http://102.209.56.234:8586/api/club/getAllMembers")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data) setMemberList(data.data);
+      })
+      .catch((err) => console.error("Failed to load members:", err));
+  }, []);
+
+
+  const getMemberName = (memberId: number): string => {
+    const member = memberList.find((m) => m.memberID === memberId);
+    return member ? member.fullName : "Unknown Member";
+  };
+
+
 
 
 

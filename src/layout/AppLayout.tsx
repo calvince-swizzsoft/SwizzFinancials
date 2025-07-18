@@ -28,7 +28,7 @@ const LayoutContent: React.FC = () => {
               backgroundPosition: 'center',
               backgroundRepeat: 'repeat',
               backgroundBlendMode: 'overlay', // or 'overlay', 'screen',multiply etc.
-              height: '100vh', // optional: makes it full screen height
+              height: '100%', // optional: makes it full screen height
               //color: 'white'   // optional: contrast text
             }}
           >

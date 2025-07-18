@@ -11,16 +11,40 @@ interface MemberSubscription {
   isActive: boolean
 }
 
+
+
+interface Member {
+  memberID: number;
+  fullName: string;
+  gender: string;
+  dateOfBirth: string;
+  nationalID: string;
+  occupation: string;
+  maritalStatus: string;
+  email: string;
+  phone: string;
+  address: string;
+  emergencyContactName: string;
+  emergencyContactPhone: string;
+  preferredContactMethod: string;
+  membershipStatus: string;
+  profileCompletionPercentage: number;
+  membershipCardNumber: string;
+  joinDate: string;
+  profilePicture: string | null;
+}
+
 const SubBill: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<MemberSubscription[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [memberList, setMemberList] = useState<Member[]>([]);
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
         const response = await axios.get<MemberSubscription[]>(
-          "http://197.232.170.121:8594/api/club/getAllMemberSubscription"
+          "http://102.209.56.234:8586/api/club/getAllMemberSubscription"
         )
         setSubscriptions(response.data)
       } catch (err) {
@@ -33,8 +57,29 @@ const SubBill: React.FC = () => {
     fetchSubscriptions()
   }, [])
 
+
+
+
+
+  
+  useEffect(() => {
+    fetch("http://102.209.56.234:8586/api/club/getAllMembers")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data) setMemberList(data.data);
+      })
+      .catch((err) => console.error("Failed to load members:", err));
+  }, []);
+
+
+  const getMemberName = (memberId: number): string => {
+    const member = memberList.find((m) => m.memberID === memberId);
+    return member ? member.fullName : "Unknown Member";
+  };
+
+
   return (
-    <ComponentCard title="Member Subscriptions">
+    <ComponentCard title="Subscribers">
       {loading && <p className="text-gray-500">Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && subscriptions.length === 0 && (
@@ -47,6 +92,7 @@ const SubBill: React.FC = () => {
               <tr>
                 <th className="px-4 py-2">Subscription ID</th>
                 <th className="px-4 py-2">Member ID</th>
+                <th className="px-4 py-2">Member</th>
                 <th className="px-4 py-2">Plan ID</th>
                 <th className="px-4 py-2">Start Date</th>
                 <th className="px-4 py-2">End Date</th>
@@ -61,7 +107,24 @@ const SubBill: React.FC = () => {
                 >
                   <td className="px-4 py-2">{sub.subscriptionId}</td>
                   <td className="px-4 py-2">{sub.memberId}</td>
-                  <td className="px-4 py-2">{sub.planId}</td>
+                  <td className="px-4 py-2">{getMemberName(sub.memberId)}</td>
+                  <td className="px-4 py-2">
+                    {sub.planId === 1 && (
+                      <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">
+                        Basic
+                      </span>
+                    )}
+                    {sub.planId === 2 && (
+                      <span className="inline-block px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+                        Standard
+                      </span>
+                    )}
+                    {sub.planId === 3 && (
+                      <span className="inline-block px-3 py-1 text-xs font-semibold text-purple-800 bg-purple-100 rounded-full">
+                        Premium
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-2">{sub.startDate}</td>
                   <td className="px-4 py-2">{sub.endDate}</td>
                   <td className="px-4 py-2">

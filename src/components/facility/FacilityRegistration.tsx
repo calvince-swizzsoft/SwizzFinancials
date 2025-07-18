@@ -67,7 +67,7 @@ export default function FacilityRegistration() {
     e.preventDefault();
     console.log(facility);
     try {
-      const response = await fetch("http://197.232.170.121:8594/api/facilities/create", {
+      const response = await fetch("http://102.209.56.234:8586/api/facilities/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

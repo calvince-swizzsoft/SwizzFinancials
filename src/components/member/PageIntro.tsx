@@ -94,7 +94,7 @@ export default function PageIntro() {
     try {
       const payload = { ...formData, profilePicture: null }; // adjust if backend doesn't handle files
       console.log("Submitting member:", payload);
-      const response = await axios.post("http://197.232.170.121:8594/api/club/postMember", payload);
+      const response = await axios.post("http://102.209.56.234:8586/api/club/postMember", payload);
 
       if (response.data.status === "00") {
         alert("Member added successfully!");

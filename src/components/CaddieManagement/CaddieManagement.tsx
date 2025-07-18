@@ -162,7 +162,7 @@ export default function CaddieManagement() {
 
   const fetchCaddies = () => {
     axios
-      .get("http://197.232.170.121:8594/api/club/getAllCaddies")
+      .get("http://102.209.56.234:8586/api/club/getAllCaddies")
       .then((res) => {
         if (res.data.status === "00") {
           setCaddies(res.data.data);
@@ -177,7 +177,7 @@ export default function CaddieManagement() {
 
   const handleSubmit = () => {
     axios
-      .post("http://197.232.170.121:8594/api/club/saveCaddies", newCaddie)
+      .post("http://102.209.56.234:8586/api/club/saveCaddies", newCaddie)
       .then((res) => {
         if (res.data.status === "00") {
           closeModal();

@@ -27,7 +27,7 @@ export default function ViewFacility() {
 
   const fetchFacilities = async () => {
     try {
-      const res = await fetch("http://197.232.170.121:8594/api/facilities/all");
+      const res = await fetch("http://102.209.56.234:8586/api/facilities/all");
       const data = await res.json();
       setFacilities(data);
     } catch (err) {
@@ -50,7 +50,7 @@ export default function ViewFacility() {
   const handleDelete = async (id: number) => {
     if (!window.confirm("Delete this facility?")) return;
     try {
-      await fetch(`http://197.232.170.121:8594/api/facilities/delete/${id}`, {
+      await fetch(`http://102.209.56.234:8586/api/facilities/delete/${id}`, {
         method: "DELETE",
       });
       setFacilities((prev) => prev.filter((f) => f.facilityId !== id));
@@ -89,7 +89,7 @@ export default function ViewFacility() {
     if (!selectedFacility) return;
     try {
       await fetch(
-        `http://197.232.170.121:8594/api/facilities/update/${selectedFacility.facilityId}`,
+        `http://102.209.56.234:8586/api/facilities/update/${selectedFacility.facilityId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

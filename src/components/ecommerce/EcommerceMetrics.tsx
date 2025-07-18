@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -5,8 +6,47 @@ import {
   GroupIcon,
 } from "../../icons";
 import Badge from "../ui/badge/Badge";
+import axios from "axios";
+
+
+
+
 
 export default function EcommerceMetrics() {
+
+  const [subscriptions, setSubscriptions] = useState([]);
+
+
+  const [memberCount, setMemberCount] = useState<number>(0);
+  useEffect(() => {
+  fetch(`http://102.209.56.234:8586/api/club/getAllMembers`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch members");
+      }
+      return response.json();
+    })
+    .then((resmember) => {
+      setMemberCount(resmember.data.length);
+    })
+    .catch((error) => {
+      console.error("Error fetching members:", error);
+    })
+    
+    const fetchSubscriptions = async () => {
+      try {
+        const response = await axios.get(
+          "http://102.209.56.234:8586/api/club/getAllMemberSubscription"
+        )
+        setSubscriptions(response.data)
+      } catch (err) {
+        console.log("Failed to load subscriptions.")
+      }
+    }
+
+    fetchSubscriptions()
+}, []);
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
       {/* <!-- Metric Item Start --> */}
@@ -25,7 +65,7 @@ export default function EcommerceMetrics() {
               Members
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              3,782
+              {memberCount.toLocaleString()}
             </h4>
           </div>
           <Badge color="success">
@@ -48,10 +88,10 @@ export default function EcommerceMetrics() {
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Orders
+              Subscribers
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              5,359
+              {subscriptions.length.toLocaleString()}
             </h4>
           </div>
 
