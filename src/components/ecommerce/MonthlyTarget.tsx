@@ -118,7 +118,7 @@ export default function MonthlyTarget() {
           </span>
         </div>
         <p className="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 sm:text-base">
-          You earn $3287 today, it's higher than last month. Keep up your good
+          You earn Ksh 3,010,287 today, it's higher than last month. Keep up your good
           work!
         </p>
       </div>

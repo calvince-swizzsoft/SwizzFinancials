@@ -59,10 +59,21 @@ const navItems: NavItem[] = [
   },
   {
     icon: <ListIcon />,
+    name: "Rooms",
+    path: "/rooms",
+  },
+  {
+    icon: <ListIcon />,
+    name: "Dinning",
+    path: "/Dinning",
+  },
+
+  /*{
+    icon: <ListIcon />,
     name: "Caddie",
     path: "/Caddie",
   },
-  /*
+  
   {
     icon: <ListIcon />,
     name: "Communication Tools",

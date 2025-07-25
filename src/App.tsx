@@ -33,6 +33,8 @@ import PayrollCompensation from "./components/Employees/PayrollCompensation";
 import PerformanceTracking from "./components/Employees/PerformanceTracking";
 import TrainingCertifications from "./components/Employees/TrainingCertifications";
 import ViewFacility from "./components/facility/ViewFacility";
+import Rooms from "./components/Rooms";
+import Dinning from "./components/Dinning";
 
 export default function App() {
   return (
@@ -45,6 +47,7 @@ export default function App() {
             <Route index path="/" element={<Home />} />
 
             <Route index path="/member" element={<ViewMember />} />
+            <Route index path="/rooms" element={<Rooms />} />
             <Route index path="/Subscription-and-billing" element={<SubBill/>} />
             <Route index path="/FacilityRegistration" element={<FacilityRegistration/>} />
             <Route index path="/Communication" element={<CommunicationTools/>} />
@@ -59,6 +62,7 @@ export default function App() {
             <Route index path="/PerformanceTracking" element={<PerformanceTracking/>} />
             <Route index path="/TrainingCertifications" element={<TrainingCertifications/>} />
             <Route index path="/facility" element={<ViewFacility/>} />
+            <Route index path="/Dinning" element={<Dinning/>} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />

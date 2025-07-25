@@ -18,9 +18,6 @@ import Button from "../ui/button/Button";
 
 
 
-
-
-
 interface Member {
   memberID: number;
   fullName: string;
@@ -64,7 +61,7 @@ export default function ViewMember() {
   const [paymentPhone, setPaymentPhone] = useState("");
 
 
-  const [memberList, setMemberList] = useState<Member[]>([]);
+
 
 
 
@@ -170,21 +167,6 @@ const handlePaymentSubmit = async () => {
 
 
 
-
-  useEffect(() => {
-    fetch("http://102.209.56.234:8586/api/club/getAllMembers")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.data) setMemberList(data.data);
-      })
-      .catch((err) => console.error("Failed to load members:", err));
-  }, []);
-
-
-  const getMemberName = (memberId: number): string => {
-    const member = memberList.find((m) => m.memberID === memberId);
-    return member ? member.fullName : "Unknown Member";
-  };
 
 
 
