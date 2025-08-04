@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "../../ui/modal"; // adjust the path if needed
@@ -99,7 +100,7 @@ const BankSetup: React.FC = () => {
 
   return (
     <div className="min-h-screen p-6 space-y-10 bg-white rounded-2xl">
-      {/* Top Bar */}
+      {/* Top Bar *//*}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-800">Club Advertisements</h2>
         <button
@@ -110,7 +111,7 @@ const BankSetup: React.FC = () => {
         </button>
       </div>
 
-      {/* Modal Form */}
+      {/* Modal Form *//*}
       <Modal
         isOpen={isItemModalOpen2}
         onClose={() => setIsItemModalOpen2(false)}
@@ -151,7 +152,7 @@ const BankSetup: React.FC = () => {
             className="border p-2 rounded w-full"
           />
 
-          {/* Optional Preview */}
+          {/* Optional Preview *//*}
           {formData.imageUrl && (
             <img
               src={`data:image/jpeg;base64,${formData.imageUrl}`}
@@ -232,7 +233,7 @@ const BankSetup: React.FC = () => {
         </form>
       </Modal>
 
-      {/* Advertisement Cards */}
+      {/* Advertisement Cards *//*}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {loading && <p className="text-center col-span-full">Loading...</p>}
         {error && <p className="text-center col-span-full text-red-500">{error}</p>}
@@ -262,3 +263,241 @@ const BankSetup: React.FC = () => {
 };
 
 export default BankSetup;
+*/
+
+
+
+
+
+// Enhanced BankSetup.tsx styled like 'SaaS Order page - Shodai.jpg'
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Modal } from '../../ui/modal';
+
+interface BankBranch {
+  BankCode: number;
+  BankDescription: string;
+  Code: number;
+  PaddedCode: string;
+  Description: string;
+  AddressAddressLine1: string;
+  AddressAddressLine2: string;
+  AddressStreet: string;
+  AddressPostalCode: string;
+  AddressCity: string;
+  AddressEmail: string;
+  AddressLandLine: string;
+  AddressMobileLine: string;
+  ContactPerson: string;
+  PhoneNumber: string;
+  CreatedDate: string;
+}
+
+interface Bank {
+  Code: number;
+  Description: string;
+  CreatedDate: string;
+  BankBranchesDTO: BankBranch[];
+}
+
+export default function BankSetup() {
+  const [banks, setBanks] = useState<Bank[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    Code: 101,
+    Description: 'KBC Bank',
+    Branches: [
+      {
+        Description: 'Westlands Branch',
+        Code: 10101,
+        PaddedCode: '10101',
+        AddressAddressLine1: 'P.O. Box 123',
+        AddressAddressLine2: 'Equity Plaza, Floor 2',
+        AddressStreet: 'Ring Road Westlands',
+        AddressPostalCode: '00100',
+        AddressCity: 'Nairobi',
+        AddressEmail: 'westlands@equitybank.co.ke',
+        AddressLandLine: '+254202000001',
+        AddressMobileLine: '+254700000001',
+        ContactPerson: 'Milca Awuor',
+        PhoneNumber: '+254700000001',
+      },
+    ],
+  });
+
+  const createdDate = new Date().toISOString();
+
+  useEffect(() => {
+    const fetchBanks = async () => {
+      try {
+        const response = await axios.get(
+          'https://1acd57da41eb.ngrok-free.app/api/values/getBanks?pagesize=1&&pageindex=0',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': 'true',
+            },
+          }
+        );
+        setBanks(response.data.Data || []);
+      } catch (error) {
+        console.error('Error fetching banks:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBanks();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const payload: Bank = {
+      Code: formData.Code,
+      Description: formData.Description,
+      CreatedDate: createdDate,
+      BankBranchesDTO: formData.Branches.map((b) => ({
+        ...b,
+        BankCode: formData.Code,
+        BankDescription: formData.Description,
+        CreatedDate: createdDate,
+      })),
+    };
+
+    try {
+      await axios.post(
+        'https://1acd57da41eb.ngrok-free.app/api/values/AddBanks',
+        payload
+      );
+      alert('Bank successfully added!');
+      setIsOpen(false);
+    } catch (err) {
+      alert('Failed to add bank.');
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  function updateBranchField(index: number, key: keyof BankBranch, value: string) {
+    const updatedBranches = [...formData.Branches];
+    updatedBranches[index] = { ...updatedBranches[index], [key]: value };
+    setFormData({ ...formData, Branches: updatedBranches });
+  }
+
+  return (
+    <div className="rounded-xl bg-white px-8 py-10 shadow-lg">
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-800">Bank Setup</h1>
+        <button
+          onClick={() => setIsOpen(true)}
+          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+        >
+          + Add Bank
+        </button>
+      </div>
+
+      <div className="overflow-hidden rounded-lg border border-gray-200">
+        <table className="w-full table-auto text-left text-sm">
+          <thead className="bg-gray-50 text-gray-700">
+            <tr>
+              <th className="px-6 py-3">Code</th>
+              <th className="px-6 py-3">Bank Name</th>
+              <th className="px-6 py-3">Created Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={3} className="px-6 py-4 text-center text-gray-500">Loading...</td>
+              </tr>
+            ) : banks.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="px-6 py-4 text-center text-gray-500">No banks found.</td>
+              </tr>
+            ) : (
+              banks.map((bank) => (
+                <tr
+                  key={bank.Code}
+                  className="border-t border-gray-100 hover:bg-gray-50"
+                >
+                  <td className="px-6 py-4">{bank.Code}</td>
+                  <td className="px-6 py-4">{bank.Description}</td>
+                  <td className="px-6 py-4">{new Date(bank.CreatedDate).toLocaleDateString()}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} className="max-w-[720px] p-6">
+        <h2 className="mb-6 text-xl font-semibold text-gray-800">Add New Bank</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Bank Name</label>
+            <input
+              type="text"
+              value={formData.Description}
+              onChange={(e) => setFormData({ ...formData, Description: e.target.value })}
+              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-indigo-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          {formData.Branches.map((branch, idx) => (
+            <div key={idx} className="border-t border-gray-200 pt-4">
+              <h4 className="mb-2 text-sm font-semibold text-gray-700">Branch {idx + 1}</h4>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <input
+                  type="text"
+                  value={branch.Description}
+                  onChange={(e) => updateBranchField(idx, 'Description', e.target.value)}
+                  placeholder="Branch Name"
+                  className="rounded border px-4 py-2"
+                  required
+                />
+                <input
+                  type="text"
+                  value={branch.AddressCity}
+                  onChange={(e) => updateBranchField(idx, 'AddressCity', e.target.value)}
+                  placeholder="City"
+                  className="rounded border px-4 py-2"
+                />
+                <input
+                  type="text"
+                  value={branch.ContactPerson}
+                  onChange={(e) => updateBranchField(idx, 'ContactPerson', e.target.value)}
+                  placeholder="Contact Person"
+                  className="rounded border px-4 py-2"
+                />
+                <input
+                  type="text"
+                  value={branch.PhoneNumber}
+                  onChange={(e) => updateBranchField(idx, 'PhoneNumber', e.target.value)}
+                  placeholder="Phone Number"
+                  className="rounded border px-4 py-2"
+                />
+              </div>
+            </div>
+          ))}
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="rounded bg-indigo-600 px-6 py-2 text-white hover:bg-indigo-700"
+            >
+              {submitting ? 'Saving...' : 'Save Bank'}
+            </button>
+          </div>
+        </form>
+      </Modal>
+    </div>
+  );
+}
