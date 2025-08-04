@@ -44,6 +44,7 @@ import SubscriptionPackage from "./components/Package/SubscriptionPackage";
 import Advertisement from "./components/Advertisement";
 import MobileUser from "./components/MobileUser";
 import BankSetup from "./components/Accounting/Bank Setup";
+import BranchSetup from "./components/Accounting/Branch";
 
 export default function App() {
   return (
@@ -76,6 +77,7 @@ export default function App() {
             <Route index path="/ChartOfAccounts" element={<ChartOfAccounts/>} />
 
             <Route index path="/BankSetup" element={<BankSetup/>} />
+            <Route index path="/BranchSetup" element={<BranchSetup/>} />
             
             <Route index path="/InvestmentProducts" element={<InvestmentProducts/>} />
             <Route index path="/PostingPeriods" element={<PostingPeriods/>} />

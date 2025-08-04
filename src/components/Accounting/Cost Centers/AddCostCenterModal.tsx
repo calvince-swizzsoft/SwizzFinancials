@@ -11,9 +11,6 @@ interface AddCostCenterModalProps {
   onSuccess: (newCostCenter: CostCenter) => void;  // pass new center back
 }
 
-
-
-
 export default function AddCostCenterModal({
   isOpen,
   onClose,

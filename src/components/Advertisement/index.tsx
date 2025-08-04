@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { Modal } from "../ui/modal";
-// adjust the path if needed
+import { Modal } from "../ui/modal";// adjust the path if needed
 
 interface Advert {
   advertID?: number;
