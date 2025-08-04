@@ -43,6 +43,21 @@ const navItems: NavItem[] = [
   },
   {
     icon: <ListIcon  />,
+    name: "Package",
+    path: "/SubscriptionPackage",
+  },
+  {
+    icon: <ListIcon  />,
+    name: "Mobile User",
+    path: "/MobileUser",
+  },
+  {
+    icon: <ListIcon  />,
+    name: "Advertisement",
+    path: "/Advertisement",
+  },
+  {
+    icon: <ListIcon  />,
     name: "Subscription and billing",
     path: "/Subscription-and-billing",
   },
@@ -66,6 +81,17 @@ const navItems: NavItem[] = [
     icon: <ListIcon />,
     name: "Dinning",
     path: "/Dinning",
+  },
+  {
+    icon: <ListIcon />,
+    name: "Accounting",
+    subItems: [
+      { name: "Cost Center", path: "/CostCenter", pro: false },
+      { name: "Chart Of Accounts", path: "/ChartOfAccounts", pro: false },
+      { name: "Investment Products", path: "/InvestmentProducts", pro: false },
+      { name: "Posting Periods", path: "/PostingPeriods", pro: false },
+      { name: "General Ledger", path: "/GeneralLedger", pro: false },
+    ],
   },
 
   /*{

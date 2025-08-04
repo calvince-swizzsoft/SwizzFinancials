@@ -37,7 +37,7 @@ const Calendar: React.FC = () => {
 
   // FETCH EVENTS FROM BACKEND
   useEffect(() => {
-    fetch("http://102.209.56.234:8586/api/club/getAllEvent")
+    fetch("http://197.232.170.121:8594/api/club/getAllEvent")
       .then((res) => res.json())
       .then((data) => {
         const mappedEvents = data.map((item: any) => ({

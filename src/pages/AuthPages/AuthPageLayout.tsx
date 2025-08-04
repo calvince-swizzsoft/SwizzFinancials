@@ -18,7 +18,7 @@ export default function AuthLayout({
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          backgroundColor: "rgba(15, 23, 42, 0.6)", // Tailwind's slate-900/90 for smooth blend
+          backgroundColor: "rgba(255, 255, 255, 0.3)", // Tailwind's slate-900/90 for smooth blend
           backgroundBlendMode: "overlay", // Blends color + image
         }}
         >
@@ -33,10 +33,10 @@ export default function AuthLayout({
                   height={48}
                   src="/images/UKC_logo.png"
                   alt="Logo"
-                  className="filter invert brightness-0"
+                  //className="filter invert brightness-0"
                 />
               </Link>
-              <p className="text-center text-gray-400 dark:text-white/60">
+              <p className="text-center text-white dark:text-white/60">
                 United Kenya Club
               </p>
             </div>

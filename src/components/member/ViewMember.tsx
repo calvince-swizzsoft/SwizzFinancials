@@ -69,7 +69,8 @@ export default function ViewMember() {
   setLoading(true);
   setError("");
 
-  fetch(`http://102.209.56.234:8586/api/club/getAllMembers`)
+  //fetch(`http://102.209.56.234:8586/api/club/getAllMembers`)
+  fetch(`http://197.232.170.121:8594/api/club/getAllMembers`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch members");
@@ -78,6 +79,7 @@ export default function ViewMember() {
     })
     .then((resmember: { data: Member[] }) => {
       setMembers(resmember.data);
+      console.log(resmember.data);
     })
     .catch((error) => {
       console.error("Error fetching members:", error);
@@ -90,14 +92,14 @@ export default function ViewMember() {
 
 
 
-
 const totalPages = Math.ceil(
   members.filter((member) =>
-    member.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.membershipCardNumber.toLowerCase().includes(searchTerm.toLowerCase())
+    (member.fullName?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (member.email?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (member.membershipCardNumber?.toLowerCase() || "").includes(searchTerm.toLowerCase())
   ).length / pageSize
 );
+
 
 console.log(paymentPhone);
 
@@ -122,7 +124,7 @@ const handlePaymentSubmit = async () => {
   };
 
   try {
-    const res = await fetch("http://102.209.56.234:8587/api/payments/c2brequest", {
+    const res = await fetch("http://197.232.170.121:8599/api/payments/c2brequest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -134,7 +136,7 @@ const handlePaymentSubmit = async () => {
 
     // Step 2: Register subscription
     const subRes = await fetch(
-      "http://102.209.56.234:8586/api/club/createMemberSubscription",
+      "http://197.232.170.121:8594/api/club/createMemberSubscription",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -252,10 +254,10 @@ const handlePaymentSubmit = async () => {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {members
                 .filter((member) =>
-                  member.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  member.membershipCardNumber.toLowerCase().includes(searchTerm.toLowerCase())
-                )
+                    (member.fullName?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+                    (member.email?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+                    (member.membershipCardNumber?.toLowerCase() || "").includes(searchTerm.toLowerCase())
+                  )
                 .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                 .map((member) => (
                 <TableRow key={member.memberID}  className="odd:bg-white even:bg-blue-50 dark:odd:bg-gray-900 dark:even:bg-blue-900">

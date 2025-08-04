@@ -35,6 +35,14 @@ import TrainingCertifications from "./components/Employees/TrainingCertification
 import ViewFacility from "./components/facility/ViewFacility";
 import Rooms from "./components/Rooms";
 import Dinning from "./components/Dinning";
+import CostCenter from "./components/Accounting/Cost Centers";
+import ChartOfAccounts from "./components/Accounting/Chart of Accounts";
+import InvestmentProducts from "./components/Accounting/Investment Products";
+import PostingPeriods from "./components/Accounting/Posting Periods";
+import GeneralLedger from "./components/Accounting/GeneralLedger";
+import SubscriptionPackage from "./components/Package/SubscriptionPackage";
+import Advertisement from "./components/Advertisement";
+import MobileUser from "./components/MobileUser";
 
 export default function App() {
   return (
@@ -63,6 +71,15 @@ export default function App() {
             <Route index path="/TrainingCertifications" element={<TrainingCertifications/>} />
             <Route index path="/facility" element={<ViewFacility/>} />
             <Route index path="/Dinning" element={<Dinning/>} />
+            <Route index path="/CostCenter" element={<CostCenter/>} />
+            <Route index path="/ChartOfAccounts" element={<ChartOfAccounts/>} />
+            <Route index path="/InvestmentProducts" element={<InvestmentProducts/>} />
+            <Route index path="/PostingPeriods" element={<PostingPeriods/>} />
+            <Route index path="/GeneralLedger" element={<GeneralLedger/>} />
+            <Route index path="/SubscriptionPackage" element={<SubscriptionPackage/>} />
+            <Route index path="/Advertisement" element={<Advertisement/>} />
+            <Route index path="/MobileUser" element={<MobileUser/>} />
+
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />

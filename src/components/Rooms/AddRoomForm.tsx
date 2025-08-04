@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Modal } from "../ui/modal";
+import { useLocation } from 'react-router';
 
 interface AddRoomFormProps {
   isOpen: boolean;
@@ -33,8 +34,12 @@ export default function AddRoomForm({ isOpen, closeModal }: AddRoomFormProps) {
   };
 
 
+
   console.log(imageBase64);
   console.log(available);
+
+  const location = useLocation();
+  const guestId = location.state?.guestId;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +51,7 @@ export default function AddRoomForm({ isOpen, closeModal }: AddRoomFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: 0,
+          id: {guestId},
           roomNumber,
           roomType: parseInt(roomType),
           capacity: parseInt(capacity.toString()),

@@ -27,7 +27,8 @@ export default function ViewFacility() {
 
   const fetchFacilities = async () => {
     try {
-      const res = await fetch("http://102.209.56.234:8586/api/facilities/all");
+      //const res = await fetch("http://102.209.56.234:8586/api/facilities/all");
+      const res = await fetch("http://197.232.170.121:8594/api/facilities/all");
       const data = await res.json();
       setFacilities(data);
     } catch (err) {
@@ -119,8 +120,8 @@ export default function ViewFacility() {
   };
 
   return (
-    <ComponentCard title="Facilities">
-      <div className="max-w-7xl mx-auto px-6 py-2">
+    <ComponentCard title="">
+      <div className="max-w-7xl mx-auto px-6 py-2" style={{backgroundColor:"rgba(0,0,0,0.04)", padding:"20px",borderRadius:"10px"}}>
         <div style={{display:"flex", justifyContent:"space-between",justifyItems:"center"}} className="mb-4">
             <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Facilities</h2>
             <Button onClick={()=>navigate('/FacilityRegistration')}>Add Facilities</Button>

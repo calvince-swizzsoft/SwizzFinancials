@@ -19,7 +19,7 @@ export default function EcommerceMetrics() {
 
   const [memberCount, setMemberCount] = useState<number>(0);
   useEffect(() => {
-  fetch(`http://102.209.56.234:8586/api/club/getAllMembers`)
+  fetch(`http://197.232.170.121:8594/api/club/getAllMembers`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch members");
@@ -36,7 +36,7 @@ export default function EcommerceMetrics() {
     const fetchSubscriptions = async () => {
       try {
         const response = await axios.get(
-          "http://102.209.56.234:8586/api/club/getAllMemberSubscription"
+          "http://197.232.170.121:8599/api/club/subscriptionsList"
         )
         setSubscriptions(response.data)
       } catch (err) {
@@ -46,6 +46,8 @@ export default function EcommerceMetrics() {
 
     fetchSubscriptions()
 }, []);
+
+console.log(subscriptions);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
@@ -91,7 +93,7 @@ export default function EcommerceMetrics() {
               Subscribers
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {subscriptions.length.toLocaleString()}
+              {subscriptions.length}
             </h4>
           </div>
 
