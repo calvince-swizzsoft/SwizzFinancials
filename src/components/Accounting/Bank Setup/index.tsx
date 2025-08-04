@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import { Modal } from "../ui/modal";
-// adjust the path if needed
+import { Modal } from "../../ui/modal"; // adjust the path if needed
 
 interface Advert {
   advertID?: number;
@@ -23,7 +21,7 @@ interface Advert {
   updatedAt?: string | null;
 }
 
-const Advertisement: React.FC = () => {
+const BankSetup: React.FC = () => {
   const [adverts, setAdverts] = useState<Advert[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -263,4 +261,4 @@ const Advertisement: React.FC = () => {
   );
 };
 
-export default Advertisement;
+export default BankSetup;

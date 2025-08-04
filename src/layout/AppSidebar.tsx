@@ -91,6 +91,7 @@ const navItems: NavItem[] = [
       { name: "Investment Products", path: "/InvestmentProducts", pro: false },
       { name: "Posting Periods", path: "/PostingPeriods", pro: false },
       { name: "General Ledger", path: "/GeneralLedger", pro: false },
+      { name: "Bank Setup", path: "/BankSetup", pro: false },
     ],
   },
 

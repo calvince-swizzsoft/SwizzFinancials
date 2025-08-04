@@ -43,6 +43,7 @@ import GeneralLedger from "./components/Accounting/GeneralLedger";
 import SubscriptionPackage from "./components/Package/SubscriptionPackage";
 import Advertisement from "./components/Advertisement";
 import MobileUser from "./components/MobileUser";
+import BankSetup from "./components/Accounting/Bank Setup";
 
 export default function App() {
   return (
@@ -73,6 +74,9 @@ export default function App() {
             <Route index path="/Dinning" element={<Dinning/>} />
             <Route index path="/CostCenter" element={<CostCenter/>} />
             <Route index path="/ChartOfAccounts" element={<ChartOfAccounts/>} />
+
+            <Route index path="/BankSetup" element={<BankSetup/>} />
+            
             <Route index path="/InvestmentProducts" element={<InvestmentProducts/>} />
             <Route index path="/PostingPeriods" element={<PostingPeriods/>} />
             <Route index path="/GeneralLedger" element={<GeneralLedger/>} />
