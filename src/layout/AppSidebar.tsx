@@ -92,7 +92,11 @@ const navItems: NavItem[] = [
       { name: "Posting Periods", path: "/PostingPeriods", pro: false },
       { name: "General Ledger", path: "/GeneralLedger", pro: false },
       { name: "Bank Setup", path: "/BankSetup", pro: false },
+<<<<<<< Updated upstream
       { name: "Branch", path: "/BranchSetup", pro: false },
+=======
+      { name: "Company", path: "/Company", pro: false },
+>>>>>>> Stashed changes
     ],
   },
 
