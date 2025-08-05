@@ -44,11 +44,8 @@ import SubscriptionPackage from "./components/Package/SubscriptionPackage";
 import Advertisement from "./components/Advertisement";
 import MobileUser from "./components/MobileUser";
 import BankSetup from "./components/Accounting/Bank Setup";
-<<<<<<< Updated upstream
 import BranchSetup from "./components/Accounting/Branch";
-=======
 import Company from "./components/Accounting/Company";
->>>>>>> Stashed changes
 
 export default function App() {
   return (
