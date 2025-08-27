@@ -88,7 +88,7 @@ export default function CostCenter() {
               </thead>
               <tbody>
                 {costCenters.map((center) => (
-                  <tr key={center.Id} className="text-gray-700">
+                  <tr key={center.Id} className="text-gray-700 even:bg-blue-gray-50/50">
                     <td className="border px-4 py-2">{center.Description}</td>
                     <td className="border px-4 py-2">
                       {center.IsLocked ? "Yes" : "No"}

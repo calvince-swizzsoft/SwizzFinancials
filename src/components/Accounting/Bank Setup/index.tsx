@@ -1,320 +1,58 @@
-/*
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Modal } from "../../ui/modal"; // adjust the path if needed
-
-interface Advert {
-  advertID?: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-  linkUrl: string;
-  advertType: string;
-  displayLocation: string;
-  startDate: string;
-  endDate: string;
-  isActive: boolean;
-  priority: number;
-  clickCount: number;
-  viewCount: number;
-  createdBy: string;
-  createdAt?: string;
-  updatedAt?: string | null;
-}
-
-const BankSetup: React.FC = () => {
-  const [adverts, setAdverts] = useState<Advert[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-
-  const [isItemModalOpen2, setIsItemModalOpen2] = useState(false);
-
-  const [formData, setFormData] = useState<Advert>({
-    title: "",
-    description: "",
-    imageUrl: "",
-    linkUrl: "",
-    advertType: "Banner",
-    displayLocation: "Homepage Top",
-    startDate: "",
-    endDate: "",
-    isActive: true,
-    priority: 1,
-    clickCount: 0,
-    viewCount: 0,
-    createdBy: "admin",
-  });
-
-  useEffect(() => {
-    fetchAdverts();
-  }, []);
-
-  const fetchAdverts = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get<Advert[]>(
-        "http://197.232.170.121:8599/api/club/getAllAdverts"
-      );
-      setAdverts(response.data);
-    } catch (err) {
-      setError("Failed to load advertisements.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type, checked } = e.target;
-    const val = type === "checkbox" ? checked : value;
-    setFormData({ ...formData, [name]: val });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://197.232.170.121:8599/api/club/createAdvert", formData);
-      await fetchAdverts();
-      setFormData({
-        title: "",
-        description: "",
-        imageUrl: "",
-        linkUrl: "",
-        advertType: "Banner",
-        displayLocation: "Homepage Top",
-        startDate: "",
-        endDate: "",
-        isActive: true,
-        priority: 1,
-        clickCount: 0,
-        viewCount: 0,
-        createdBy: "admin",
-      });
-      setIsItemModalOpen2(false);
-      alert("Advert created successfully.");
-    } catch (err) {
-      alert("Failed to create advert.");
-    }
-  };
-
-  return (
-    <div className="min-h-screen p-6 space-y-10 bg-white rounded-2xl">
-      {/* Top Bar *//*}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Club Advertisements</h2>
-        <button
-          onClick={() => setIsItemModalOpen2(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          + Add Advert
-        </button>
-      </div>
-
-      {/* Modal Form *//*}
-      <Modal
-        isOpen={isItemModalOpen2}
-        onClose={() => setIsItemModalOpen2(false)}
-        className="max-w-[600px] m-4"
-      >
-        <form onSubmit={handleSubmit} className="space-y-4 p-4">
-          <h2 className="text-lg font-semibold text-gray-700">New Advertisement</h2>
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            value={formData.title}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-            rows={3}
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  setFormData({ ...formData, imageUrl: (reader.result as string).split(',')[1] });
-                };
-                reader.readAsDataURL(file);
-              }
-            }}
-            className="border p-2 rounded w-full"
-          />
-
-          {/* Optional Preview *//*}
-          {formData.imageUrl && (
-            <img
-              src={`data:image/jpeg;base64,${formData.imageUrl}`}
-              alt="Preview"
-              className="w-full h-40 object-contain border rounded mt-2"
-            />
-          )}
-
-          <input
-            type="text"
-            name="linkUrl"
-            placeholder="Link URL"
-            value={formData.linkUrl}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-          />
-          <div className="flex gap-2">
-            <input
-              type="date"
-              name="startDate"
-              value={formData.startDate.split("T")[0]}
-              onChange={(e) =>
-                setFormData({ ...formData, startDate: e.target.value + "T00:00:00" })
-              }
-              className="border p-2 rounded w-full"
-            />
-            <input
-              type="date"
-              name="endDate"
-              value={formData.endDate.split("T")[0]}
-              onChange={(e) =>
-                setFormData({ ...formData, endDate: e.target.value + "T23:59:59" })
-              }
-              className="border p-2 rounded w-full"
-            />
-          </div>
-          <select
-            name="advertType"
-            value={formData.advertType}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-          >
-            <option value="Banner">Banner</option>
-            <option value="Popup">Popup</option>
-          </select>
-          <select
-            name="displayLocation"
-            value={formData.displayLocation}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-          >
-            <option value="Homepage Top">Homepage Top</option>
-            <option value="Sidebar">Sidebar</option>
-          </select>
-          <input
-            type="number"
-            name="priority"
-            placeholder="Priority"
-            value={formData.priority}
-            onChange={handleInputChange}
-            className="border p-2 rounded w-full"
-          />
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={formData.isActive}
-              onChange={handleInputChange}
-            />
-            <span>Is Active</span>
-          </label>
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
-          >
-            Submit
-          </button>
-        </form>
-      </Modal>
-
-      {/* Advertisement Cards *//*}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {loading && <p className="text-center col-span-full">Loading...</p>}
-        {error && <p className="text-center col-span-full text-red-500">{error}</p>}
-        {adverts.map((ad) => (
-          <div
-            key={ad.advertID}
-            className="rounded-xl overflow-hidden border border-gray-200 shadow hover:shadow-lg transition "
-          >
-              <img
-                src={`data:image/jpeg;base64,${ad.imageUrl}`}
-                alt={ad.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h4 className="font-bold text-lg text-gray-800">{ad.title}</h4>
-                <p className="text-sm text-gray-600 mt-2">{ad.description}</p>
-                <p className="text-xs text-gray-400 mt-2">
-                  From: {new Date(ad.startDate).toLocaleDateString()} <br />
-                  To: {new Date(ad.endDate).toLocaleDateString()}
-                </p>
-              </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default BankSetup;
-*/
-
-
-
-
-
-// Enhanced BankSetup.tsx styled like 'SaaS Order page - Shodai.jpg'
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaBuilding } from 'react-icons/fa';
 import { Modal } from '../../ui/modal';
 
-interface BankBranch {
-  BankCode: number;
-  BankDescription: string;
-  Code: number;
-  PaddedCode: string;
+interface Branch {
+  Id?: string;
+  Code?: number;
+  PaddedCode?: string;
+  BankCode?: number;
+  BankDescription?: string;
   Description: string;
-  AddressAddressLine1: string;
-  AddressAddressLine2: string;
-  AddressStreet: string;
-  AddressPostalCode: string;
-  AddressCity: string;
-  AddressEmail: string;
-  AddressLandLine: string;
-  AddressMobileLine: string;
-  ContactPerson: string;
-  PhoneNumber: string;
-  CreatedDate: string;
+  ContactPerson?: string;
+  PhoneNumber?: string;
+  AddressAddressLine1?: string;
+  AddressAddressLine2?: string;
+  AddressStreet?: string;
+  AddressPostalCode?: string;
+  AddressCity?: string;
+  AddressEmail?: string;
+  AddressLandLine?: string;
+  AddressMobileLine?: string;
+  CreatedDate?: string;
 }
 
 interface Bank {
+  Id?: string;
   Code: number;
+  PaddedCode?: string;
   Description: string;
   CreatedDate: string;
-  BankBranchesDTO: BankBranch[];
+  BankBranchesDTO: Branch[];
 }
 
-export default function BankSetup() {
+export default function BankComponent() {
   const [banks, setBanks] = useState<Bank[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [branchFilter, setBranchFilter] = useState('');
+  const [expandedRows, setExpandedRows] = useState<{ [key: string]: boolean }>({});
+
+
+
+  const createdDate = new Date().toISOString();
 
   const [formData, setFormData] = useState({
     Code: 101,
     Description: 'KBC Bank',
     Branches: [
       {
-        Description: 'Westlands Branch',
         Code: 10101,
         PaddedCode: '10101',
+        Description: 'Westlands Branch',
         AddressAddressLine1: 'P.O. Box 123',
         AddressAddressLine2: 'Equity Plaza, Floor 2',
         AddressStreet: 'Ring Road Westlands',
@@ -329,35 +67,49 @@ export default function BankSetup() {
     ],
   });
 
-  const createdDate = new Date().toISOString();
+  const fetchBanks = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_ACCOUNT_URL}/api/values/getBanks?pagesize=1&&pageindex=0`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+          },
+        }
+      );
+      setBanks(res.data.Data);
+      setSelectedBank(res.data.Data[0]);
+    } catch (error) {
+      console.error('Error fetching banks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBanks = async () => {
-      try {
-        const response = await axios.get(
-          'https://1acd57da41eb.ngrok-free.app/api/values/getBanks?pagesize=1&&pageindex=0',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'ngrok-skip-browser-warning': 'true',
-            },
-          }
-        );
-        setBanks(response.data.Data || []);
-      } catch (error) {
-        console.error('Error fetching banks:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchBanks();
   }, []);
+
+  const toggleRow = (id: string) => {
+    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const updateBranchField = (index: number, field: keyof Branch, value: any) => {
+    const updatedBranches = [...formData.Branches];
+    updatedBranches[index] = {
+      ...updatedBranches[index],
+      [field]: value,
+    };
+    setFormData({ ...formData, Branches: updatedBranches });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
 
-    const payload: Bank = {
+    const payload = {
       Code: formData.Code,
       Description: formData.Description,
       CreatedDate: createdDate,
@@ -370,12 +122,20 @@ export default function BankSetup() {
     };
 
     try {
-      await axios.post(
-        'https://1acd57da41eb.ngrok-free.app/api/values/AddBanks',
-        payload
+      const response = await axios.post(
+        `${import.meta.env.VITE_ACCOUNT_URL}/api/values/AddBanks`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+          },
+        }
       );
+      console.log(response);
       alert('Bank successfully added!');
       setIsOpen(false);
+      fetchBanks();
     } catch (err) {
       alert('Failed to add bank.');
       console.error(err);
@@ -384,59 +144,130 @@ export default function BankSetup() {
     }
   };
 
-  function updateBranchField(index: number, key: keyof BankBranch, value: string) {
-    const updatedBranches = [...formData.Branches];
-    updatedBranches[index] = { ...updatedBranches[index], [key]: value };
-    setFormData({ ...formData, Branches: updatedBranches });
-  }
-
   return (
-    <div className="rounded-xl bg-white px-8 py-10 shadow-lg">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Bank Setup</h1>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
-        >
-          + Add Bank
-        </button>
+    <div className="flex h-screen bg-gray-100 p-4 rounded-2xl">
+      {/* Left: Bank List */}
+      <div className="w-1/3 bg-white border-r overflow-y-auto p-6 rounded-bl-2xl rounded-tl-2xl">
+        <div className="flex justify-between items-center mb-4 bg-blue-100 p-3 rounded-2xl">
+          <h2 className="text-xl font-semibold">Banks</h2>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 "
+          >
+            + Add Banks
+          </button>
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          banks.map((bank) => (
+            <div
+              key={bank.Id}
+              className={`p-4 border rounded mb-3 cursor-pointer ${
+                selectedBank?.Id === bank.Id
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-800'
+              }`}
+              onClick={() => setSelectedBank(bank)}
+            >
+              <div>
+                <h3 className="font-medium">{bank.Description}</h3>
+                <p className="text-xs">Code: {bank.PaddedCode}</p>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-gray-200">
-        <table className="w-full table-auto text-left text-sm">
-          <thead className="bg-gray-50 text-gray-700">
-            <tr>
-              <th className="px-6 py-3">Code</th>
-              <th className="px-6 py-3">Bank Name</th>
-              <th className="px-6 py-3">Created Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={3} className="px-6 py-4 text-center text-gray-500">Loading...</td>
-              </tr>
-            ) : banks.length === 0 ? (
-              <tr>
-                <td colSpan={3} className="px-6 py-4 text-center text-gray-500">No banks found.</td>
-              </tr>
-            ) : (
-              banks.map((bank) => (
-                <tr
-                  key={bank.Code}
-                  className="border-t border-gray-100 hover:bg-gray-50"
-                >
-                  <td className="px-6 py-4">{bank.Code}</td>
-                  <td className="px-6 py-4">{bank.Description}</td>
-                  <td className="px-6 py-4">{new Date(bank.CreatedDate).toLocaleDateString()}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      {/* Right: Branches */}
+      <div className="flex-1 bg-white p-6 overflow-y-auto">
+        <h2 className="text-xl font-semibold mb-4">Branches</h2>
+
+        {selectedBank ? (
+          selectedBank.BankBranchesDTO.length === 0 ? (
+            <p className="text-gray-600">No branches available for this bank.</p>
+          ) : (
+            <>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  value={branchFilter}
+                  onChange={(e) => setBranchFilter(e.target.value)}
+                  placeholder="Filter branches by name..."
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="bg-gray-50 border-b">
+                    <th className="text-left p-2">#</th>
+                    <th className="text-left p-2">Description</th>
+                    <th className="text-left p-2">Code</th>
+                    <th className="text-left p-2">Padded Code</th>
+                    <th className="text-left p-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedBank.BankBranchesDTO
+                    .filter((branch) =>
+                      branch.Description?.toLowerCase().includes(branchFilter.toLowerCase())
+                    )
+                    .map((branch, index) => (
+                      <React.Fragment key={branch.Id ?? index}>
+                        <tr className="border-b hover:bg-gray-50">
+                          <td className="p-2">{index + 1}</td>
+                          <td className="p-2 flex items-center gap-2">
+                            <FaBuilding className="text-gray-500" />
+                            {branch.Description}
+                          </td>
+                          <td className="p-2">{branch.Code ?? '—'}</td>
+                          <td className="p-2">{branch.PaddedCode ?? '—'}</td>
+                          <td className="p-2">
+                            <button
+                              onClick={() => toggleRow(branch.Id ?? `${index}`)}
+                              className="text-blue-600 hover:underline"
+                            >
+                              {expandedRows[branch.Id ?? `${index}`]
+                                ? 'Show Less'
+                                : 'Show More'}
+                            </button>
+                          </td>
+                        </tr>
+
+                        {expandedRows[branch.Id ?? `${index}`] && (
+                          <tr className="border-b bg-blue-100">
+                            <td colSpan={5} className="p-4">
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                                <p><strong>Bank Code:</strong> {branch.BankCode ?? '—'}</p>
+                                <p><strong>Contact Person:</strong> {branch.ContactPerson ?? '—'}</p>
+                                <p><strong>Phone Number:</strong> {branch.PhoneNumber ?? '—'}</p>
+                                <p><strong>Address 1:</strong> {branch.AddressAddressLine1 ?? '—'}</p>
+                                <p><strong>Address 2:</strong> {branch.AddressAddressLine2 ?? '—'}</p>
+                                <p><strong>Street:</strong> {branch.AddressStreet ?? '—'}</p>
+                                <p><strong>Postal Code:</strong> {branch.AddressPostalCode ?? '—'}</p>
+                                <p><strong>City:</strong> {branch.AddressCity ?? '—'}</p>
+                                <p><strong>Email:</strong> {branch.AddressEmail ?? '—'}</p>
+                                <p><strong>Landline:</strong> {branch.AddressLandLine ?? '—'}</p>
+                                <p><strong>Mobile:</strong> {branch.AddressMobileLine ?? '—'}</p>
+                                <p><strong>Created:</strong> {branch.CreatedDate ? new Date(branch.CreatedDate).toLocaleDateString() : '—'}</p>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
+                </tbody>
+              </table>
+            </>
+          )
+        ) : (
+          <p>Select a bank to view its branches.</p>
+        )}
       </div>
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} className="max-w-[720px] p-6">
+      {/* Modal */}
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}  className="max-w-[720px] p-6">
         <h2 className="mb-6 text-xl font-semibold text-gray-800">Add New Bank</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -487,7 +318,37 @@ export default function BankSetup() {
             </div>
           ))}
 
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <button
+              type="button"
+              onClick={() =>
+                setFormData({
+                  ...formData,
+                  Branches: [
+                    ...formData.Branches,
+                    {
+                      Description: '',
+                      Code: 0,
+                      PaddedCode: '',
+                      AddressAddressLine1: '',
+                      AddressAddressLine2: '',
+                      AddressStreet: '',
+                      AddressPostalCode: '',
+                      AddressCity: '',
+                      AddressEmail: '',
+                      AddressLandLine: '',
+                      AddressMobileLine: '',
+                      ContactPerson: '',
+                      PhoneNumber: '',
+                    },
+                  ],
+                })
+              }
+              className="text-sm text-indigo-600 hover:underline"
+            >
+              + Add Another Branch
+            </button>
+
             <button
               type="submit"
               disabled={submitting}

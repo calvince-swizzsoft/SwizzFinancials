@@ -51,8 +51,8 @@ export default function PageIntro() {
     emergencyContactName: "",
     emergencyContactPhone: "",
     preferredContactMethod: "",
-    membershipStatus: "",
-    profileCompletionPercentage: 0,
+    membershipStatus: "Active",
+    profileCompletionPercentage: 10,
     membershipCardNumber: "",
     joinDate: "",
     profilePicture: null,
@@ -223,7 +223,7 @@ export default function PageIntro() {
                   <Label>Preferred Contact Method</Label>
                   <Input name="preferredContactMethod" value={formData.preferredContactMethod} onChange={handleChange} />
                 </div>
-
+                {/*
                 <div>
                   <Label>Membership Status</Label>
                   <select
@@ -246,7 +246,7 @@ export default function PageIntro() {
                     value={formData.profileCompletionPercentage.toString()}
                     onChange={handleChange}
                   />
-                </div>
+                </div>*/}
                 <div>
                   <Label>Membership Card Number</Label>
                   <Input name="membershipCardNumber" value={formData.membershipCardNumber} onChange={handleChange} />

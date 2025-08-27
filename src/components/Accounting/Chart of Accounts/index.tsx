@@ -111,7 +111,7 @@ export default function QuickBooksTabsChartOfAccounts() {
               <h3 className="text-2xl font-bold text-gray-800 mt-1">
                 {totals[type].toLocaleString("en-US", {
                   style: "currency",
-                  currency: "USD",
+                  currency: "Ksh",
                 })}
               </h3>
             </div>
@@ -161,7 +161,7 @@ export default function QuickBooksTabsChartOfAccounts() {
                     <td className="p-3 text-green-700 font-medium">
                       {account.balance.toLocaleString("en-US", {
                         style: "currency",
-                        currency: "USD",
+                        currency: "Ksh",
                       })}
                     </td>
                     <td className="p-3">

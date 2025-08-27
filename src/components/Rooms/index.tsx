@@ -8,7 +8,7 @@ import Guest from './Guest';
 
 
 const Rooms: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'rooms' | 'booking' | 'guest'>('guest');
+  const [activeTab, setActiveTab] = useState<'rooms' | 'booking' | 'guest'>('rooms');
 
   //const changeActivetabFromChild = (data) =>{
    // setActiveTab(data)

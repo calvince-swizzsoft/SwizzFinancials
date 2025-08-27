@@ -58,7 +58,7 @@ export default function BranchSetup() {
   const fetchBranches = async () => {
     try {
       const res = await axios.get(
-        'https://43d797ae2495.ngrok-free.app/api/values/branches',
+        `${import.meta.env.VITE_ACCOUNT_URL}/api/values/branches`,
         {
           headers: { 'ngrok-skip-browser-warning': 'true' },
         }
@@ -81,7 +81,7 @@ export default function BranchSetup() {
 
     try {
       await axios.post(
-        'https://43d797ae2495.ngrok-free.app/api/values/add-branch',
+        `${import.meta.env.VITE_ACCOUNT_URL}/api/values/add-branch`,
         formData,
         {
           headers: {

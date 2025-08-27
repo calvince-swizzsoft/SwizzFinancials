@@ -94,6 +94,10 @@ const navItems: NavItem[] = [
       { name: "Bank Setup", path: "/BankSetup", pro: false },
       { name: "Branch", path: "/BranchSetup", pro: false },
       { name: "Company", path: "/Company", pro: false },
+      { name: "Budget", path: "/Budget", pro: false },
+      { name: "Journal", path: "/Journal", pro: false },
+      { name: "Bank Linkage", path: "/BankLinkage", pro: false },
+      { name: "Invoice", path: "/Invoice", pro: false },
     ],
   },
 

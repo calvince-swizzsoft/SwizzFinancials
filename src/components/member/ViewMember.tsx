@@ -61,6 +61,9 @@ export default function ViewMember() {
   const [paymentPhone, setPaymentPhone] = useState("");
 
 
+  const [loadingSubscripption, setLoadingSubscription] = useState(false);
+
+
 
 
 
@@ -104,10 +107,11 @@ const totalPages = Math.ceil(
 console.log(paymentPhone);
 
 const handlePaymentSubmit = async () => {
+  setLoadingSubscription(true);
   const payload = {
     SessionID: "1",
     Phonenumber: paymentPhone,
-    Amount: "5",
+    Amount: "1",
     accno: "254719119560",
     TransactionType: "DirectDeposit",
     TransactionType2: "DirectDeposit",
@@ -116,12 +120,20 @@ const handlePaymentSubmit = async () => {
 
  
   const subscriptionPayload = {
-    memberId: selectedMember?.memberID,
-    planId: subscriptionForm.planID,
+    member :
+    {
+      memberId: selectedMember?.memberID
+    },
+    subscriptionPlan: 
+    {
+      planId: subscriptionForm.planID
+    },
     startDate: subscriptionForm.startDate,
     endDate: subscriptionForm.endDate,
     isActive: true,
   };
+
+  console.log(subscriptionPayload);
 
   try {
     const res = await fetch("http://197.232.170.121:8599/api/payments/c2brequest", {
@@ -130,27 +142,35 @@ const handlePaymentSubmit = async () => {
       body: JSON.stringify(payload),
     });
 
-    console.log(res);
+    /*
+    RESPONSE BODY FOR PAYMENT 
+    {
+      "statusDescription": "Successful",
+      "status": "00"
+    }*/
 
     if (!res.ok) throw new Error("Payment failed");
 
     // Step 2: Register subscription
     const subRes = await fetch(
-      "http://197.232.170.121:8594/api/club/createMemberSubscription",
+      "http://197.232.170.121:8599/api/club/createMemberSubscription",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(subscriptionPayload),
       }
     );
+    console.log(subRes);
 
     if (!subRes.ok) throw new Error("Subscription failed");
 
     alert("Subscribed Successfully");
+    setLoadingSubscription(false);
     closePaymentModal();
   } catch (error) {
     console.error(error);
     alert("Payment failed. Please try again.");
+    setLoadingSubscription(false);
   }
 };
 
@@ -298,7 +318,7 @@ const handlePaymentSubmit = async () => {
                         size="sm"
                         variant="primary"
                       >
-                        Subscribe
+                        {loadingSubscripption ? "...subscribing": "subscribe"}
                       </Button>
 
                   </TableCell>

@@ -22,7 +22,7 @@ export default function GeneralLedger() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://43d797ae2495.ngrok-free.app/api/values/GetGeneralLeadgersBalances`,
+        `${import.meta.env.VITE_ACCOUNT_URL}/api/values/GetGeneralLeadgersBalances`,
         {
           headers: { "ngrok-skip-browser-warning": "true" },
         }

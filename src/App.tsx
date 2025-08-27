@@ -46,6 +46,10 @@ import MobileUser from "./components/MobileUser";
 import BankSetup from "./components/Accounting/Bank Setup";
 import BranchSetup from "./components/Accounting/Branch";
 import Company from "./components/Accounting/Company";
+import BudgetComponent from "./components/Accounting/Budget";
+import JournalComponent from "./components/Accounting/Journals";
+import BankLinkages from "./components/Accounting/BankLinkage";
+import { InvoiceComponent } from "./components/Accounting/Invoice";
 
 export default function App() {
   return (
@@ -87,6 +91,10 @@ export default function App() {
             <Route index path="/Advertisement" element={<Advertisement/>} />
             <Route index path="/MobileUser" element={<MobileUser/>} />
             <Route index path="/Company" element={<Company/>} />
+            <Route index path="/Budget" element={<BudgetComponent/>} />
+            <Route index path="/Journal" element={<JournalComponent/>} />
+            <Route index path="/BankLinkage" element={<BankLinkages/>} />
+            <Route index path="/Invoice" element={<InvoiceComponent/>} />
 
 
             {/* Others Page */}

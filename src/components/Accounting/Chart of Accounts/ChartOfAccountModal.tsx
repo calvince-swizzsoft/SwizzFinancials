@@ -59,7 +59,12 @@ const ChartOfAccountModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_ACCOUNT_URL}/api/values/chartofaccount`, formData);
+      const res = await axios.post(`${import.meta.env.VITE_ACCOUNT_URL}/api/values/chartofaccount`, formData, {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+          },
+        });
       alert(res.data?.Message || "Chart of Account created.");
       onClose();
     } catch (err) {
