@@ -36,52 +36,16 @@ const navItems: NavItem[] = [
     name: "Dashboard",
     path: "/",
   },
-  {
-    icon: <UserCircleIcon />,
-    name: "Member",
-    path: "/member",
-  },
-  {
-    icon: <ListIcon  />,
-    name: "Package",
-    path: "/SubscriptionPackage",
-  },
-  {
-    icon: <ListIcon  />,
-    name: "Mobile User",
-    path: "/MobileUser",
-  },
-  {
-    icon: <ListIcon  />,
-    name: "Advertisement",
-    path: "/Advertisement",
-  },
-  {
-    icon: <ListIcon  />,
-    name: "Subscription and billing",
-    path: "/Subscription-and-billing",
-  },
-
-  {
-    name: "Facility",
-    icon: <PageIcon />,
-    path:"/facility"
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Event",
-    path: "/calendar",
-  },
-  {
-    icon: <ListIcon />,
-    name: "Rooms",
-    path: "/rooms",
-  },
-  {
-    icon: <ListIcon />,
-    name: "Dinning",
-    path: "/Dinning",
-  },
+  // Disabled links that rely on other backends
+  // { icon: <UserCircleIcon />, name: "Member", path: "/member" },
+  // { icon: <ListIcon  />, name: "Package", path: "/SubscriptionPackage" },
+  // { icon: <ListIcon  />, name: "Mobile User", path: "/MobileUser" },
+  // { icon: <ListIcon  />, name: "Advertisement", path: "/Advertisement" },
+  // { icon: <ListIcon  />, name: "Subscription and billing", path: "/Subscription-and-billing" },
+  // { name: "Facility", icon: <PageIcon />, path:"/facility" },
+  // { icon: <CalenderIcon />, name: "Event", path: "/calendar" },
+  // { icon: <ListIcon />, name: "Rooms", path: "/rooms" },
+  // { icon: <ListIcon />, name: "Dinning", path: "/Dinning" },
   {
     icon: <ListIcon />,
     name: "Accounting",
@@ -96,6 +60,7 @@ const navItems: NavItem[] = [
       { name: "Company", path: "/Company", pro: false },
       { name: "Budget", path: "/Budget", pro: false },
       { name: "Journal", path: "/Journal", pro: false },
+      { name: "Posting", path: "/Posting", pro: false },
       { name: "Bank Linkage", path: "/BankLinkage", pro: false },
       { name: "Invoice", path: "/Invoice", pro: false },
     ],

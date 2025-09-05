@@ -54,3 +54,18 @@ export interface LedgerPayload {
   RecordStatus: number;
   GeneralLedgerEntries: GeneralLedgerEntry[];
 }
+
+export interface TransactionModel {
+ TotalValue: number;
+ CreditAmount: number;
+ DebitAmount: number;
+  BranchId: string;
+  TransactionCode?: number;
+  PrimaryDescription?: string;
+  Reference?: string;
+  ValueDate: string;
+  CreditChartOfAccountId: string | null;
+  DebitChartOfAccountId: string | null;
+  ChartOfAccountId: string | null;
+  ContraChartOfAccountId: string | null;
+} 

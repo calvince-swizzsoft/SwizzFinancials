@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import ChartOfAccountModal from "./ChartOfAccountModal";
@@ -31,25 +32,56 @@ interface ApiAccount {
   IsLocked: boolean;
 }
 
+interface LedgerBalance {
+  Id: string;
+  Balance: number;
+}
+
+
 export default function QuickBooksTabsChartOfAccounts() {
+  
+  const navigate = useNavigate();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [activeTab, setActiveTab] = useState<AccountType>("Asset");
   const [loading, setLoading] = useState<boolean>(true);
 
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchAccounts = async () => {
+ useEffect(() => {
+    const fetchAccountsAndBalances = async () => {
       try {
-        const res = await axios.get<ApiResponse>(
+        // Fetch chart of accounts
+        const accountsRes = await axios.get<ApiResponse>(
           `${import.meta.env.VITE_ACCOUNT_URL}/api/values/GetChartOfAccount`,
           {
             headers: { "ngrok-skip-browser-warning": "true" },
           }
         );
+        const apiData = accountsRes.data.Data || [];
 
-        const apiData = res.data.Data || [];
+        // Fetch balances
+        const balancesRes = await axios.get<{ Success: boolean; Message: string; Data: LedgerBalance[] }>(
+          `${import.meta.env.VITE_ACCOUNT_URL}/api/values/GetGeneralLeadgersBalances`,
+          {
+            headers: { "ngrok-skip-browser-warning": "true" },
+          }
+        );
+        const balancesData: LedgerBalance[] = balancesRes.data.Data || [];
 
+        //console.log(balancesData)
+
+        // Map balances by AccountId for quick lookup
+        const balanceMap: Record<string, number> = {};
+        balancesData.forEach((item) => {
+         // console.log(item.AccountId, item.Balance);
+          balanceMap[item.Id] = item.Balance;
+        });
+
+        console.log(balanceMap)
+        
+        
+
+        // Format accounts with real balances
         const formattedData: Account[] = apiData
           .filter((item) =>
             ["Asset", "Liability", "Revenue", "Expense"].includes(item.AccountTypeDescription)
@@ -59,20 +91,21 @@ export default function QuickBooksTabsChartOfAccounts() {
             name: item.AccountName,
             code: String(item.AccountCode),
             type: item.AccountTypeDescription as AccountType,
-            // Mocking balance for now
-            balance: Math.floor(Math.random() * 100000), // Replace with real balance from API
+            balance: balanceMap[item.Id] ?? 0,
             status: item.IsLocked ? "Inactive" : "Active",
           }));
 
+          console.log(balanceMap);
+
         setAccounts(formattedData);
       } catch (error) {
-        console.error("Error fetching accounts:", error);
+        console.error("Error fetching accounts or balances:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAccounts();
+    fetchAccountsAndBalances();
   }, []);
 
   const groupedAccounts: Record<AccountType, Account[]> = {
@@ -158,12 +191,19 @@ export default function QuickBooksTabsChartOfAccounts() {
                   >
                     <td className="p-3">{account.code}</td>
                     <td className="p-3">{account.name}</td>
-                    <td className="p-3 text-green-700 font-medium">
-                      {account.balance.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "Ksh",
-                      })}
-                    </td>
+                    <td
+  className="p-3 text-green-700 font-medium cursor-pointer underline"
+  onClick={() => {
+    console.log("Navigating to ledger for account:", account.id);
+    navigate(`/accounting/ledger/${account.id}`);
+  }}
+  title="View transactions"
+>
+  {account.balance.toLocaleString("en-US", {
+    style: "currency",
+    currency: "Ksh",
+  })}
+</td>
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
